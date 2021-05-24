@@ -1,0 +1,20 @@
+#user sign up endpoint
+POST http://localhost:3000/v1/user
+Content-Type: application/json
+
+{
+    "name": "Patel Prachi",
+    "company": "Medical",
+    "address": "Barrie,Ontario",
+    "phone": "8320012688",
+    "email": "Prachi715@gmail.com",
+    "password":"pra$$@@X123"
+}
+### user signinendpoint
+POST http://localhost:3000/v1/user/login
+Content-Type: application/json
+
+{
+    "email": "Pachi715@gmail.com",
+    "password":"pra$$@@X123"
+}
