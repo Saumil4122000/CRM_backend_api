@@ -8,6 +8,7 @@ client.on("error",function(error){
 
 const setJWT = (key, value) => {
     // console.log(key,value)
+    // Storing AccessToken to radis database
     return new Promise((resolve, reject) => {
 
         try {
@@ -23,11 +24,11 @@ const setJWT = (key, value) => {
 
 }
 const getJWT = (key) => {
-    console.log(key)
+    // console.log(key)
     return new Promise((resolve, reject) => {
 
         try {
-            client.get("key", (err, resp) => {
+            client.get(key, (err, resp) => {
                 if (err) reject(err)
                 resolve(resp);
             })

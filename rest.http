@@ -18,3 +18,8 @@ Content-Type: application/json
     "email": "Saumil715@gmail.com",
     "password":"sau$$@@X123"
 }
+
+
+### Get User End Point
+GET  http://localhost:3000/v1/user
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IlNhdW1pbDcxNUBnbWFpbC5jb20iLCJpYXQiOjE2MjE5NDc5MDQsImV4cCI6MTYyMTk0ODgwNH0.wiCKUi6j_BizICoqi2HA-culpiFMb9Lmgbmz0DppQu8

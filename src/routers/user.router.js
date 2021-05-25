@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
-const { insertUser, getUserByEmail } = require('../model/user/User.model')
-
+const { insertUser, getUserByEmail,getUserById } = require('../model/user/User.model')
+const {userAuthorization}=require('../middlewares/authorization.middleware')
 const { hashPassword, comparePassword } = require("../helper/bcrypt.helper")
 const { json } = require("body-parser")
 const { createRefreshJWT, createAccessJWT } = require("../helper/jwt.helper")
@@ -10,6 +10,27 @@ router.all("/", (req, res, next) => {
     // res.json({message : "return from user router"})
     next()
 })
+
+
+// Get User Profile Router
+router.get('/',userAuthorization,async(req,res)=>{
+   
+    // Client send the request so it will go to userAuthorization(Middlewares) which will grab the jwt token from headers 
+
+    //  From userAuthorization calls the next() so  control comes to async(req,res)=> part and function will be executed once the authorization done
+ 
+    // 3) extract userid from radis
+    // This _id comes from the userAuthorization(Middlewares) where id is set
+    const _id=req.userId
+
+
+    // Calling the function to get data from mongodb through _id got from redis db
+    const userProf=await getUserById(_id)
+
+    // 4) get User profile from Mongodb through id 
+    res.json({user:userProf})
+})
+
 
 // create user route
 router.post("/", async (req, res) => {
@@ -78,5 +99,6 @@ router.post("/login", async (req, res) => {
     })
 
 })
+
 
 module.exports = router
