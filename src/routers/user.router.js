@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
             address,
             email,
             password: hashedPass
-
+        
         }
         const result = await insertUser(newUserObj)
         console.log(result);
@@ -61,15 +61,15 @@ router.post("/login", async (req, res) => {
 
 
     const result = await comparePassword(password, passFromdb)
-    console.log(result)
+    // console.log(result)
 
 
     if (!result) {
         res.json({ status: "Error", message: "Invalid email or password" })
     }
     // If result of login is true then generate token
-    const accessJWT = await createAccessJWT(user.email)
-    const refreshJWT = await createRefreshJWT(user.email)
+    const accessJWT = await createAccessJWT(user.email,`${user._id}`)
+    const refreshJWT = await createRefreshJWT(user.email,`${user._id}`)
     res.json({
         status: "Success",
         message: "Login successful",

@@ -3,18 +3,18 @@ POST http://localhost:3000/v1/user
 Content-Type: application/json
 
 {
-    "name": "Patel Prachi",
+    "name": "Shah Saumil",
     "company": "Medical",
     "address": "Barrie,Ontario",
-    "phone": "8320012688",
-    "email": "Prachi715@gmail.com",
-    "password":"pra$$@@X123"
+    "phone": "8320012687",
+    "email": "Saumil715@gmail.com",
+    "password":"sau$$@@X123"
 }
 ### user signinendpoint
 POST http://localhost:3000/v1/user/login
 Content-Type: application/json
 
 {
-    "email": "Prachi715@gmail.com",
-    "password":"pra$$@@X123"
+    "email": "Saumil715@gmail.com",
+    "password":"sau$$@@X123"
 }
