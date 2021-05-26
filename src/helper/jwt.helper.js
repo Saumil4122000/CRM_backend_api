@@ -19,7 +19,7 @@ const createAccessJWT = async (email, _id) => {
 const createRefreshJWT = async (email, _id) => {
 
     try {
-        const refreshJWT = jwt.sign({ email }, process.env.JWT_ACCESS_SECRET, { expiresIn: '30d' })
+        const refreshJWT = jwt.sign({ email }, process.env.JWT_REFRESH_SECRET, { expiresIn: '30d' })
         // Shhhhh is secret key 
 
         // Storing the refreshTokwn to mongodb
@@ -43,8 +43,20 @@ const verifyAccess = (userJWT) => {
 }
 
 
+const verifyRefresh = (userJWT) => {
+    try {
+        return  Promise.resolve(  // Decode the jwt webtoken which is created by jwt through the sercet keu
+            jwt.verify(userJWT, process.env.JWT_REFRESH_SECRET)
+        )
+    } catch (error) {
+        // User is not verify
+        return Promise.resolve(error);
+    }
+}
+
 module.exports = {
     createAccessJWT,
     createRefreshJWT,
-    verifyAccess
+    verifyAccess,
+    verifyRefresh
 }

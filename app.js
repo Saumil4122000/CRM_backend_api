@@ -54,6 +54,8 @@ app.use('/v1/user', userRouter)
 const ticketRouter = require("./src/routers/ticket.router")
 app.use('/v1/ticket', ticketRouter)
 
+const tokenRouter = require("./src/routers/token.router")
+app.use('/v1/tokens', tokenRouter)
 
 // Error handling to avoid crash
 const handleError = require("./src/utils/errorHandler")
