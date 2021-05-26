@@ -1,10 +1,11 @@
 const express = require("express")
 const router = express.Router()
-const { insertUser, getUserByEmail,getUserById } = require('../model/user/User.model')
-const {userAuthorization}=require('../middlewares/authorization.middleware')
+const { insertUser, getUserByEmail, getUserById } = require('../model/user/User.model')
+const { userAuthorization } = require('../middlewares/authorization.middleware')
 const { hashPassword, comparePassword } = require("../helper/bcrypt.helper")
 const { json } = require("body-parser")
 const { createRefreshJWT, createAccessJWT } = require("../helper/jwt.helper")
+const { setPasswordResetPin } = require("../model/resetPin/ResetPin.model")
 
 router.all("/", (req, res, next) => {
     // res.json({message : "return from user router"})
@@ -13,22 +14,22 @@ router.all("/", (req, res, next) => {
 
 
 // Get User Profile Router
-router.get('/',userAuthorization,async(req,res)=>{
-   
+router.get('/', userAuthorization, async (req, res) => {
+
     // Client send the request so it will go to userAuthorization(Middlewares) which will grab the jwt token from headers 
 
     //  From userAuthorization calls the next() so  control comes to async(req,res)=> part and function will be executed once the authorization done
- 
+
     // 3) extract userid from radis
     // This _id comes from the userAuthorization(Middlewares) where id is set
-    const _id=req.userId
+    const _id = req.userId
 
 
     // Calling the function to get data from mongodb through _id got from redis db
-    const userProf=await getUserById(_id)
+    const userProf = await getUserById(_id)
 
     // 4) get User profile from Mongodb through id 
-    res.json({user:userProf})
+    res.json({ user: userProf })
 })
 
 
@@ -46,7 +47,7 @@ router.post("/", async (req, res) => {
             address,
             email,
             password: hashedPass
-        
+
         }
         const result = await insertUser(newUserObj)
         console.log(result);
@@ -89,8 +90,8 @@ router.post("/login", async (req, res) => {
         res.json({ status: "Error", message: "Invalid email or password" })
     }
     // If result of login is true then generate token
-    const accessJWT = await createAccessJWT(user.email,`${user._id}`)
-    const refreshJWT = await createRefreshJWT(user.email,`${user._id}`)
+    const accessJWT = await createAccessJWT(user.email, `${user._id}`)
+    const refreshJWT = await createRefreshJWT(user.email, `${user._id}`)
     res.json({
         status: "Success",
         message: "Login successful",
@@ -100,5 +101,16 @@ router.post("/login", async (req, res) => {
 
 })
 
+
+router.post("/reset-password", async (req, res) => {
+    const { email } = req.body
+    const user = await getUserByEmail(email);
+    if (user && user._id) {
+        // create 2)create unique 6 digit pin
+        const setPin = await setPasswordResetPin(email);
+        return res.json(setPin);
+    }
+    res.json({ status: "error", message: "If email is there in db then pin will be send in short time" })
+})
 
 module.exports = router

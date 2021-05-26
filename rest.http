@@ -27,3 +27,13 @@ Authorization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IlNhdW1pbDcxNUBnb
 ### Get refreshed token
 GET http://localhost:3000/v1/tokens
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IlNhdW1pbDcxNUBnbWFpbC5jb20iLCJpYXQiOjE2MjIwMTE5OTUsImV4cCI6MTYyNDYwMzk5NX0.YSOopFp5jtnY5JI3VTuKcn0Iolg4_wTzDKw01VyQgfM
+
+
+
+### password reset endpoint
+POST http://localhost:3000/v1/user/reset-password
+Content-Type: application/json
+
+{
+    "email": "Saumil715@gmail.com"
+}
