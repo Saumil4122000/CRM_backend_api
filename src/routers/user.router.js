@@ -1,13 +1,14 @@
 const express = require("express")
 const router = express.Router()
-const { insertUser, getUserByEmail, getUserById,updatePassword } = require('../model/user/User.model')
+const { deleteJWT } = require("../helper/redis.helper")
+const { insertUser, getUserByEmail, getUserById, updatePassword, storeUserRefreshJWT } = require('../model/user/User.model')
 const { userAuthorization } = require('../middlewares/authorization.middleware')
 const { hashPassword, comparePassword } = require("../helper/bcrypt.helper")
 const { json } = require("body-parser")
 const { createRefreshJWT, createAccessJWT } = require("../helper/jwt.helper")
-const { setPasswordResetPin,getPinByEmailPin,deletePin } = require("../model/resetPin/ResetPin.model")
-const {mailProcessor} =require("../helper/email.helper")
-const {resetPassReqValidation,updatePassValidation}=require("../middlewares/formValidation.middlewares")
+const { setPasswordResetPin, getPinByEmailPin, deletePin } = require("../model/resetPin/ResetPin.model")
+const { mailProcessor } = require("../helper/email.helper")
+const { resetPassReqValidation, updatePassValidation } = require("../middlewares/formValidation.middlewares")
 
 router.all("/", (req, res, next) => {
     // res.json({message : "return from user router"})
@@ -89,7 +90,7 @@ router.post("/login", async (req, res) => {
 
 
     if (!result) {
-      return  res.json({ status: "Error", message: "Invalid email or password" })
+        return res.json({ status: "Error", message: "Invalid email or password" })
     }
     // If result of login is true then generate token
     const accessJWT = await createAccessJWT(user.email, `${user._id}`)
@@ -104,66 +105,87 @@ router.post("/login", async (req, res) => {
 })
 
 
-router.post("/reset-password",resetPassReqValidation,async (req, res) => {
+router.post("/reset-password", resetPassReqValidation, async (req, res) => {
     const { email } = req.body
     const user = await getUserByEmail(email);
     if (user && user._id) {
         // create 2)create unique 6 digit pin
         // 3) Save pin to Mongodb
         const setPin = await setPasswordResetPin(email);
-        await mailProcessor({email,pin:setPin.pin,type:"request-new-pass"})
+        await mailProcessor({ email, pin: setPin.pin, type: "request-new-pass" })
 
-      
-            return res.json({
-                status:"Success",
-                message: "If email is there in db then pin will be send in short time"
-            });
-    
-   
+
+        return res.json({
+            status: "Success",
+            message: "If email is there in db then pin will be send in short time"
+        });
+
+
     }
     res.json({ status: "error", message: "If email is there in db then pin will be send in short time" })
 })
 
 
 // 3) After sending pin through mail lets update the password and store to db
-router.patch("/reset-password",updatePassValidation,async(req,res)=>{
-    const {email,pin,newPassword} = req.body;
-// Validate if pin is exist in db or not
-    const getPin=await getPinByEmailPin(email,pin);
+router.patch("/reset-password", updatePassValidation, async (req, res) => {
+    const { email, pin, newPassword } = req.body;
+    // Validate if pin is exist in db or not
+    const getPin = await getPinByEmailPin(email, pin);
 
-    if(getPin._id){
-        const dbDate=getPin.addedAt;
+    if (getPin._id) {
+        const dbDate = getPin.addedAt;
         // Check if pin expired or not
-        const expireIn=1;
-        let expDate=dbDate.setDate(dbDate.getDate()+expireIn)
-        const today=Date();
-        if(expDate<today){
-           return res.json({status:"error",message:"Invalid or expired date"})
+        const expireIn = 1;
+        let expDate = dbDate.setDate(dbDate.getDate() + expireIn)
+        const today = Date();
+        if (expDate < today) {
+            return res.json({ status: "error", message: "Invalid or expired date" })
         }
 
-        const hashpass=await hashPassword(newPassword);
+        const hashpass = await hashPassword(newPassword);
 
-        const result=await updatePassword(email,hashpass);
+        const result = await updatePassword(email, hashpass);
 
 
-        if(result._id){
+        if (result._id) {
 
             // Send email notification
 
-          await mailProcessor({email,type:"password-update-success"})
-          deletePin(email,pin)
-          return  res.json({status:"success",message:"Updated successfully"})
+            await mailProcessor({ email, type: "password-update-success" })
+            deletePin(email, pin)
+            return res.json({ status: "success", message: "Updated successfully" })
         }
         // If date is valid then encrypt the newly added password and store it to db
 
     }
 
-    res.json({status:"error",Message:"unable to update password"})
+    res.json({ status: "error", Message: "unable to update password" })
 
 })
 
 
 
+// 1)get jwt and verify
+// 2)delete accessjwt from redis db
+// 3)delete refreshtoken from mongodb
+
+router.delete("/logout", userAuthorization //get jwt and verify
+    , async (req, res) => {
+        const { authorization } = req.headers
+        const _id = req.userId;
+
+
+        // 2)delete accessjwt from redis 
+        deleteJWT(authorization)
+        // 3)delete refreshtoken from mongodb
+        const result = await storeUserRefreshJWT(_id, "")
+        if (result._id) {
+            res.json({status:"success",message:"Log Out successfully"})
+        }
+        // Passing the empty refresh token so it store empty in refresh token
+        res.json({ result })
+
+    })
 
 
 

@@ -45,3 +45,9 @@ Content-Type: application/json
     "pin":"364773",
     "newPassword":"prachipatel"
 }
+
+
+
+### user logout end point
+DELETE   http://localhost:3000/v1/user/logout
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhdW1pbDcxNUBnbWFpbC5jb20iLCJpYXQiOjE2MjIxMzUzNzEsImV4cCI6MTYyMjEzNjI3MX0.l_tbXfol1ZO6U1bLZEVf7BhkIUwTbbndYzx4kKBN8AM
