@@ -7,6 +7,7 @@ const { json } = require("body-parser")
 const { createRefreshJWT, createAccessJWT } = require("../helper/jwt.helper")
 const { setPasswordResetPin,getPinByEmailPin,deletePin } = require("../model/resetPin/ResetPin.model")
 const {mailProcessor} =require("../helper/email.helper")
+const {resetPassReqValidation,updatePassValidation}=require("../middlewares/formValidation.middlewares")
 
 router.all("/", (req, res, next) => {
     // res.json({message : "return from user router"})
@@ -103,7 +104,7 @@ router.post("/login", async (req, res) => {
 })
 
 
-router.post("/reset-password", async (req, res) => {
+router.post("/reset-password",resetPassReqValidation,async (req, res) => {
     const { email } = req.body
     const user = await getUserByEmail(email);
     if (user && user._id) {
@@ -125,7 +126,7 @@ router.post("/reset-password", async (req, res) => {
 
 
 // 3) After sending pin through mail lets update the password and store to db
-router.patch("/reset-password",async(req,res)=>{
+router.patch("/reset-password",updatePassValidation,async(req,res)=>{
     const {email,pin,newPassword} = req.body;
 // Validate if pin is exist in db or not
     const getPin=await getPinByEmailPin(email,pin);
