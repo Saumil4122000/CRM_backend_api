@@ -7,7 +7,7 @@ Content-Type: application/json
     "company": "Medical",
     "address": "Barrie,Ontario",
     "phone": "8320012687",
-    "email": "Saumil715@gmail.com",
+    "email": "saumil715@gmail.com",
     "password":"sau$$@@X123"
 }
 ### user signinendpoint
@@ -15,19 +15,17 @@ POST http://localhost:3000/v1/user/login
 Content-Type: application/json
 
 {
-    "email": "Saumil715@gmail.com",
+    "email": "saumil715@gmail.com",
     "password":"sau$$@@X123"
 }
 
 
 ### Get User End Point
 GET  http://localhost:3000/v1/user
-Authorization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IlNhdW1pbDcxNUBnbWFpbC5jb20iLCJpYXQiOjE2MjIwMTM0MTEsImV4cCI6MTYyMjAxMzQ3MX0.odGhnnJvJZ7yKzuzhXxBUQle4U0dVI3KInOgHUprzzA
-
+Authorization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhdW1pbDcxNUBnbWFpbC5jb20iLCJpYXQiOjE2MjIwOTI2MDUsImV4cCI6MTYyMjA5MzUwNX0.6sTJ98VvgX5idT15b_Pz5InL7ERerAPpJImsA9uwY8Y
 ### Get refreshed token
 GET http://localhost:3000/v1/tokens
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IlNhdW1pbDcxNUBnbWFpbC5jb20iLCJpYXQiOjE2MjIwMTE5OTUsImV4cCI6MTYyNDYwMzk5NX0.YSOopFp5jtnY5JI3VTuKcn0Iolg4_wTzDKw01VyQgfM
-
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhdW1pbDcxNUBnbWFpbC5jb20iLCJpYXQiOjE2MjIwOTI2MDUsImV4cCI6MTYyMjA5MzUwNX0.6sTJ98VvgX5idT15b_Pz5InL7ERerAPpJImsA9uwY8Y
 
 
 ### password reset endpoint
@@ -35,5 +33,5 @@ POST http://localhost:3000/v1/user/reset-password
 Content-Type: application/json
 
 {
-    "email": "Saumil715@gmail.com"
+    "email": "saumil715@gmail.com"
 }

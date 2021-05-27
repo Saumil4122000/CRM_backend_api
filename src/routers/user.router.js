@@ -6,6 +6,7 @@ const { hashPassword, comparePassword } = require("../helper/bcrypt.helper")
 const { json } = require("body-parser")
 const { createRefreshJWT, createAccessJWT } = require("../helper/jwt.helper")
 const { setPasswordResetPin } = require("../model/resetPin/ResetPin.model")
+const {mailProcessor} =require("../helper/email.helper")
 
 router.all("/", (req, res, next) => {
     // res.json({message : "return from user router"})
@@ -107,8 +108,22 @@ router.post("/reset-password", async (req, res) => {
     const user = await getUserByEmail(email);
     if (user && user._id) {
         // create 2)create unique 6 digit pin
+        // 3) Save pin to Mongodb
         const setPin = await setPasswordResetPin(email);
-        return res.json(setPin);
+        const result=await mailProcessor(email,setPin.pin)
+
+        if(result && result.messageId){
+            return res.json({
+                status:"Success",
+                message: "If email is there in db then pin will be send in short time"
+            });
+        }
+
+        return res.json({
+            status:"Success",
+            message: "Unable to send email"
+        });
+   
     }
     res.json({ status: "error", message: "If email is there in db then pin will be send in short time" })
 })
