@@ -51,11 +51,6 @@ const insertUser = (userObj) => {
         });
     }
 
-
-
-
-
-
     const storeUserRefreshJWT=(_id,token)=>{
         return new Promise((resolve,reject)=>{
             try {
@@ -73,9 +68,27 @@ const insertUser = (userObj) => {
         })
     }
 
+    const updatePassword=(email,newPassword)=>{
+        return new Promise((resolve,reject)=>{
+            try {
+                // IF the accesstoken not there in mongodb then store it 
+                UserSchema.findOneAndUpdate({email},{
+                    // Storing object of token to mongo db comes from userschema
+                    $set:{"password":newPassword}, 
+                },{new:true}
+                ).then((data)=>resolve(data))
+                .catch((error)=>reject(error))
+            } catch (error) {
+                console.log(error)
+                reject(error)
+            }
+        })
+    }
+
 module.exports = {
     insertUser,
     getUserByEmail,
     getUserById,
-    storeUserRefreshJWT
+    storeUserRefreshJWT,
+   updatePassword
 }

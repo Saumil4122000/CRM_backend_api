@@ -6,12 +6,12 @@ const transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
     port: 587,
     auth: {
-        user: 'candido.kris@ethereal.email',
-        pass: 'TAeBhf5UzDrQdvWCAB'
+        user: 'manley.welch13@ethereal.email',
+        pass: 'pG5jenf3JYxhUPNshy'
     }
 });
 const send = (info) => {
-    return new Promise(async(resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
             // send mail with defined transport object
             let result = await transporter.sendMail(info);
@@ -33,24 +33,48 @@ const send = (info) => {
 
 
 
-const mailProcessor = (email, pin) => {
-    const info = {
-        from: '"CRM SYSTEM" <gabe.legros@ethereal.email>', // sender address
-        to: email, // list of receivers
-        subject: "password Reset Pin", // Subject line
-        text: "Here is your passwod reset pin: " + pin + " pin will be valid only 1day", // plain text body
-        html: `<b>Hello</b>
-        Here is your pin
-        <b>${pin}</b>
-        This pin well expire in 1 day
-        <p></p>  `// html body
+const mailProcessor = ({email, pin, type}) => {
+    let info=' ';
+    switch (type) {
+        case "request-new-pass":
+          info = {
+                from: '"CRM SYSTEM" <gabe.legros@ethereal.email>', // sender address
+                to: email, // list of receivers
+                subject: "password Reset Pin", // Subject line
+                text: "Here is your passwod reset pin: " + pin + " pin will be valid only 1day", // plain text body
+                html: `<b>Hello</b>
+                Here is your pin
+                <b>${pin}</b>
+                This pin well expire in 1 day
+                <p></p>  `// html body
+
+            }
+            send(info)
+
+            break;
+
+        case "password-update-success":
+
+          info = {
+                from: '"CRM SYSTEM" <gabe.legros@ethereal.email>', // sender address
+                to: email, // list of receivers
+                subject: "password Updated", // Subject line
+                text: "Your new Password has been updated", // plain text body
+                html: `<b>Hello</b>
+                <p></p>  `// html body
+
+            }
+            send(info)
+
+            break;
 
     }
-    send(info)
+
+
 }
 
 
 
-module.exports={
+module.exports = {
     mailProcessor
 }

@@ -16,13 +16,13 @@ Content-Type: application/json
 
 {
     "email": "saumil715@gmail.com",
-    "password":"sau$$@@X123"
+    "password":"prachipatel"
 }
 
 
 ### Get User End Point
 GET  http://localhost:3000/v1/user
-Authorization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhdW1pbDcxNUBnbWFpbC5jb20iLCJpYXQiOjE2MjIwOTI2MDUsImV4cCI6MTYyMjA5MzUwNX0.6sTJ98VvgX5idT15b_Pz5InL7ERerAPpJImsA9uwY8Y
+Authorization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhdW1pbDcxNUBnbWFpbC5jb20iLCJpYXQiOjE2MjIwOTYyNjQsImV4cCI6MTYyMjA5NzE2NH0.5dbULA3Us3gvXP4a8hNMRGxzPIXpCUM_yAIhBoVfnVA
 ### Get refreshed token
 GET http://localhost:3000/v1/tokens
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhdW1pbDcxNUBnbWFpbC5jb20iLCJpYXQiOjE2MjIwOTI2MDUsImV4cCI6MTYyMjA5MzUwNX0.6sTJ98VvgX5idT15b_Pz5InL7ERerAPpJImsA9uwY8Y
@@ -34,4 +34,14 @@ Content-Type: application/json
 
 {
     "email": "saumil715@gmail.com"
+}
+
+### password update endpoint
+PATCH  http://localhost:3000/v1/user/reset-password
+Content-Type: application/json
+
+{
+    "email": "saumil715@gmail.com",
+    "pin":"364773",
+    "newPassword":"prachipatel"
 }
