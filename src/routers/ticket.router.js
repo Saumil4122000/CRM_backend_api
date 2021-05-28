@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const { insertTicket,getTicket,getTicketByid } = require("../model/Ticket/Ticket.model")
+const { insertTicket,getTicket,getTicketByid,updateClientReply,updatestatusClose } = require("../model/Ticket/Ticket.model")
 const { userAuthorization } = require("../middlewares/authorization.middleware")
 // WorkFlow
 // 1 create url endpoint
@@ -87,6 +87,50 @@ router.get("/:_id", userAuthorization, async (req, res) => {
    }
 })
 
+router.put("/:_id/", userAuthorization, async (req, res) => {
+
+   console.log(req.params)
+   try {
+      const {message,sender}=req.body
+
+      const {_id}=req.params;
+      const userId=req.userId
+      const result = await updateClientReply({_id,message,sender})
+      console.log(result)
+         
+
+      if(result._id){
+      return res.json({ status: "success", message:"Your message updated" })
+      }
+
+      res.json({ status: "error", message: "Unable to update message" })
+   } catch (error) {
+       res.json({ status: "error", message: error.message })
+   }
+})
+
+// Close ticket
+router.patch("/close-ticket/:_id", userAuthorization, async (req, res) => {
+
+   try {
+      const {_id}=req.params;
+    
+      const userId=req.userId;
+
+      // console.log(userId+"PAPAPAPAPAPA")
+      const result = await updatestatusClose(_id,userId)
+      
+         
+
+      if(result._id){
+      return res.json({ status: "success", message:"Ticket has been closed" })
+      }
+
+      res.json({ status: "error", message: "Unable to close Ticket" })
+   } catch (error) {
+       res.json({ status: "error", message: error.message })
+   }
+})
 
 
 module.exports = router
