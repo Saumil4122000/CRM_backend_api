@@ -180,10 +180,10 @@ router.delete("/logout", userAuthorization //get jwt and verify
         // 3)delete refreshtoken from mongodb
         const result = await storeUserRefreshJWT(_id, "")
         if (result._id) {
-            res.json({status:"success",message:"Log Out successfully"})
+            return   res.json({status:"success",message:"Log Out successfully"})
         }
         // Passing the empty refresh token so it store empty in refresh token
-        res.json({ result })
+         res.json({ result })
 
     })
 

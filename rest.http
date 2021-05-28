@@ -50,4 +50,4 @@ Content-Type: application/json
 
 ### user logout end point
 DELETE   http://localhost:3000/v1/user/logout
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhdW1pbDcxNUBnbWFpbC5jb20iLCJpYXQiOjE2MjIxMzUzNzEsImV4cCI6MTYyMjEzNjI3MX0.l_tbXfol1ZO6U1bLZEVf7BhkIUwTbbndYzx4kKBN8AM
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhdW1pbDcxNUBnbWFpbC5jb20iLCJpYXQiOjE2MjIxMzU4MTcsImV4cCI6MTYyMjEzNjcxN30.RO3ibYnfbmEC5rTD4HdYJDoCD3KAXQXSMhoCXgjew60
