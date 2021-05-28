@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router()
-const { insertTicket } = require("../model/Ticket/Ticket.model")
+const { insertTicket,getTicket } = require("../model/Ticket/Ticket.model")
+const { userAuthorization } = require("../middlewares/authorization.middleware")
 // WorkFlow
 // 1 create url endpoint
 // 2 retreive nreticket data
@@ -21,16 +22,14 @@ router.all("/", (req, res, next) => {
 })
 
 // 1 create url endpoint -ticket is created
-router.post("/",async (req, res) => {
- 
-
-
-
+router.post("/", userAuthorization, async (req, res) => {
    try {
       const { subject, sender, message } = req.body
 
+      const userId=req.userId
+
       const ticketObj = {
-         clientId: "60af7f5cbac0f306703cc64e",
+         clientId: userId,
          subject,
          conversation: [{
             sender,
@@ -40,17 +39,36 @@ router.post("/",async (req, res) => {
 
       const result = await insertTicket(ticketObj)
       if (result._id) {
-         res.json({ status: "success", message: "new ticket created" })
+         return res.json({ status: "success", message: "new ticket created" })
       }
 
       res.json({ status: "error", message: "Unable to create ticket please try again" })
    } catch (error) {
-         res.json({status:"error",message:error.message})
+       res.json({ status: "error", message: error.message })
    }
-
-
-
-
 })
+
+
+// Get all tickets for user
+router.get("/", userAuthorization, async (req, res) => {
+   try {
+      
+      const userId=req.userId
+
+    
+
+      const result = await getTicket(userId)
+      
+      console.log(result)
+         return res.json({ status: "success", result })
+  
+
+      // res.json({ status: "error", message: "Unable to create ticket please try again" })
+   } catch (error) {
+       res.json({ status: "error", message: error.message })
+   }
+})
+
+
 
 module.exports = router
