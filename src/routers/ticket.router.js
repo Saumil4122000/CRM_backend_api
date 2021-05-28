@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const { insertTicket,getTicket } = require("../model/Ticket/Ticket.model")
+const { insertTicket,getTicket,getTicketByid } = require("../model/Ticket/Ticket.model")
 const { userAuthorization } = require("../middlewares/authorization.middleware")
 // WorkFlow
 // 1 create url endpoint
@@ -59,6 +59,24 @@ router.get("/", userAuthorization, async (req, res) => {
 
       const result = await getTicket(userId)
       
+      console.log(result)
+         return res.json({ status: "success", result })
+  
+
+      // res.json({ status: "error", message: "Unable to create ticket please try again" })
+   } catch (error) {
+       res.json({ status: "error", message: error.message })
+   }
+})
+
+router.get("/:_id", userAuthorization, async (req, res) => {
+
+   console.log(req.params)
+   try {
+      
+      const {_id}=req.params;
+      const userId=req.userId
+      const result = await getTicketByid(_id,userId)
       console.log(result)
          return res.json({ status: "success", result })
   

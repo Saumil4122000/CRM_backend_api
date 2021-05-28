@@ -15,11 +15,27 @@ const insertTicket = (ticketObj) => {
 
 }
 
-const getTicket=(clientID)=>{
+const getTicket=(clientId)=>{
     return new Promise((resolve, reject) => {
     
         try {
-            TicketSchema.find({clientId: clientID})
+            TicketSchema.find({clientId})
+            .then((data) => resolve(data))
+            .catch((error) =>  reject(error))
+        } catch (error) {
+            reject(error);
+        }
+    }
+    )
+}
+
+
+const getTicketByid=(_id,clientId)=>{
+    console.log("this is client id"+clientId)
+    return new Promise((resolve, reject) => {
+       
+        try {
+            TicketSchema.find({_id,clientId})
             .then((data) => resolve(data))
             .catch((error) =>  reject(error))
         } catch (error) {
@@ -30,5 +46,6 @@ const getTicket=(clientID)=>{
 }
 module.exports={
     insertTicket,
-    getTicket
+    getTicket,
+    getTicketByid
 }
