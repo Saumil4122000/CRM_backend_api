@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const { insertTicket,getTicket,getTicketByid,updateClientReply,updatestatusClose,deleteTicket } = require("../model/Ticket/Ticket.model")
 const { userAuthorization } = require("../middlewares/authorization.middleware")
+const {createNewTicketValidation,ReplyTicketMessageValidation}=require("../middlewares/formValidation.middlewares")
 // WorkFlow
 // 1 create url endpoint
 // 2 retreive nreticket data
@@ -22,7 +23,7 @@ router.all("/", (req, res, next) => {
 })
 
 // 1 create url endpoint -ticket is created
-router.post("/", userAuthorization, async (req, res) => {
+router.post("/", createNewTicketValidation ,userAuthorization, async (req, res) => {
    try {
       const { subject, sender, message } = req.body
 
@@ -87,14 +88,14 @@ router.get("/:_id", userAuthorization, async (req, res) => {
    }
 })
 
-router.put("/:_id/", userAuthorization, async (req, res) => {
+router.put("/:_id/",ReplyTicketMessageValidation ,userAuthorization, async (req, res) => {
 
    console.log(req.params)
    try {
       const {message,sender}=req.body
 
       const {_id}=req.params;
-      const userId=req.userId
+      console.log(_id+"asasa")
       const result = await updateClientReply({_id,message,sender})
       console.log(result)
          
