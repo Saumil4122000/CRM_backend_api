@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const { insertTicket,getTicket,getTicketByid,updateClientReply,updatestatusClose } = require("../model/Ticket/Ticket.model")
+const { insertTicket,getTicket,getTicketByid,updateClientReply,updatestatusClose,deleteTicket } = require("../model/Ticket/Ticket.model")
 const { userAuthorization } = require("../middlewares/authorization.middleware")
 // WorkFlow
 // 1 create url endpoint
@@ -127,6 +127,29 @@ router.patch("/close-ticket/:_id", userAuthorization, async (req, res) => {
       }
 
       res.json({ status: "error", message: "Unable to close Ticket" })
+   } catch (error) {
+       res.json({ status: "error", message: error.message })
+   }
+})
+
+// Delete ticket
+router.delete("/close-ticket/:_id", userAuthorization, async (req, res) => {
+
+   try {
+      const {_id}=req.params;
+    
+      const userId=req.userId;
+
+      // console.log(userId+"PAPAPAPAPAPA")
+      const result = await deleteTicket(_id,userId)
+      
+      // console.log(result)
+
+     
+      return res.json({ status: "success", message:"Ticket has been deleted" })
+   
+
+      
    } catch (error) {
        res.json({ status: "error", message: error.message })
    }

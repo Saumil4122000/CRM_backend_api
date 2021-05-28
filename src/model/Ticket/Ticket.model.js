@@ -91,10 +91,27 @@ const updatestatusClose=(_id,clientId)=>{
     }
     )
 }
+const deleteTicket=(_id,clientId)=>{
+    // console.log(clientId+"PAPAPAPAPAPAPAPA")
+        return new Promise((resolve, reject) => {
+           
+            try {
+                TicketSchema.findByIdAndDelete(
+                    {_id,clientId},
+                    )
+                .then((data) => resolve(data))
+                .catch((error) =>  reject(error))
+            } catch (error) {
+                reject(error);
+            }
+        }
+        )
+    }
 module.exports={
     insertTicket,
     getTicket,
     getTicketByid,
     updateClientReply,
-    updatestatusClose
+    updatestatusClose,
+    deleteTicket
 }
