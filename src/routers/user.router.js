@@ -31,8 +31,14 @@ router.get('/', userAuthorization, async (req, res) => {
     // Calling the function to get data from mongodb through _id got from redis db
     const userProf = await getUserById(_id)
 
+    const {name,email}=userProf;
     // 4) get User profile from Mongodb through id 
-    res.json({ user: userProf })
+    res.json({ user: {
+        _id,
+        name,
+        email
+    } 
+})
 })
 
 
@@ -173,8 +179,6 @@ router.delete("/logout", userAuthorization //get jwt and verify
     , async (req, res) => {
         const { authorization } = req.headers
         const _id = req.userId;
-
-
         // 2)delete accessjwt from redis 
         deleteJWT(authorization)
         // 3)delete refreshtoken from mongodb
@@ -184,7 +188,6 @@ router.delete("/logout", userAuthorization //get jwt and verify
         }
         // Passing the empty refresh token so it store empty in refresh token
          res.json({ result })
-
     })
 
 

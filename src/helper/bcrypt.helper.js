@@ -12,10 +12,16 @@ const hashPassword = plainPassword => {
 
 const comparePassword=(plainPass,passFromDb)=>{
     return new Promise((resolve,reject)=>{
-        bcrypt.compare(plainPass,passFromDb,(err,result)=>{
-            if(err) reject(err)
-            resolve(result)
-        })
+
+        try {
+            bcrypt.compare(plainPass,passFromDb,(err,result)=>{
+                if(err) reject(err)
+                else { resolve(result)}
+            }) 
+        } catch (error) {
+            resolve(err)
+        }                  
+       
     })
 }
 
